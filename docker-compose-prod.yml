@@ -1,0 +1,26 @@
+version: '3'
+services:
+
+    certservice:
+        build: 
+            context: .
+        image: codehooks/certservice
+        container_name: certservice
+        ports:
+            - 8090:3000
+        restart: always
+        environment:
+            - CENTRAL_REDIS_HOST=host.docker.internal
+            - CERTBOT_DRYRUN=yes
+            - CERTBOT_STAGING=yes
+            - LOG_LEVEL=${LOG_LEVEL}
+        volumes:
+            - letsencrypt:/etc/letsencrypt
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "10"
+    
+volumes:
+    letsencrypt:
